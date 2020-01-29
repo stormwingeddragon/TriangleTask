@@ -2,6 +2,7 @@ package RestAssuredTriangle;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import javax.swing.text.Utilities;
@@ -15,8 +16,6 @@ public class TriangleTests {
     public void setUp() {
         u = new Utilities();
     }
-
-
 
     @Test
     public void checkTriangleArea() throws Exception {
@@ -37,32 +36,47 @@ public class TriangleTests {
     @Test
     public void incompatibleSidesLength() throws Exception {
         createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"3;4;50\"}", 422);
+        deleteTriangle(getFirstExistingTriangle());
     }
 
     @Test
-    public void createSameTriangleTwice() throws Exception {
-        String id = createTriangle("{\"separator\": \";\", \"input\": \"3;4;5\"}");
-        String id2 = createTriangle("{\"separator\": \";\", \"input\": \"3;4;5\"}");
-        deleteTriangle(id);
-        deleteTriangle(id2);
+    public void negativeSidesLengthsDoNotCauseException() throws Exception {
+        createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"-3;-4;-5\"}", 200);
+        //deleteTriangle(getFirstExistingTriangle());
     }
 
+    @Test
+    public void straightLineTriangleDoesNotCauseException() throws Exception {
+        createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"3;4;7\"}", 200);
+        deleteTriangle(getFirstExistingTriangle());
+    }
+
+    @Test
+    @Ignore
+    public void checkImpossibleToCreateEleventhTriangle() throws Exception {
+        String[] ids = new String[10];
+        //String[] ids = {"0"};
+        for  (int i=0; i < 10; i++) {
+          ids[i]  = createTriangle("{\"separator\": \";\", \"input\": \"3;4;5\"}");
+        }
+
+        createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"3;4;5\"}", 422);
+
+        for  (int i=0; i < 10; i++) {
+            deleteTriangle(getFirstExistingTriangle());
+        }
+    }
 
     @Test
     public void cleanupTriangles() {
         String id = getFirstExistingTriangle();
         while (id != null) {
-            //String id = getFirstExistingTriangle();
             deleteTriangle(id);
             System.out.println(id + "id found");
+            id = getFirstExistingTriangle();
         }
     }
-
-
-
-
-
-    }
+}
 
 
 
