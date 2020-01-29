@@ -116,13 +116,14 @@ public class TriangleTests {
         deleteTriangle(getFirstExistingTriangle());
     }
 
-    @Ignore
+    //Bug: area of a triangle with 2x Float.MAX_VALUE sides and third side as 1 is equal to 0
+    //@Ignore
     @Test
     public void maxValueSidesBoundaryCondition() throws Exception {
         float side = Float.MAX_VALUE;
-        createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"" +side+ ";" +side+ ";" +side+ "\"}", 200);
+        createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"" +side+ ";" +side+ ";1\"}", 200);
         calculateArea(getFirstExistingTriangle());
-        calculatePerimeter(getFirstExistingTriangle());
+        //calculatePerimeter(getFirstExistingTriangle());
         deleteTriangle(getFirstExistingTriangle());
     }
 
