@@ -54,7 +54,7 @@ public class TriangleTests {
         deleteTriangle(getFirstExistingTriangle());
     }
 
-    //Ignores fourth side
+    //Ignores fourth side (possible bug)
     @Ignore
     @Test
     public void fourSides() throws Exception {
@@ -83,6 +83,12 @@ public class TriangleTests {
     @Test
     public void oneOfSeparatorsDiffers() throws Exception {
         createTriangleAndCheckResponse("{\"separator\": \",\", \"input\": \"3,4;3.55\"}", 422);
+        deleteTriangle(getFirstExistingTriangle());
+    }
+
+    @Test
+    public void noInput() throws Exception {
+        createTriangleAndCheckResponse("{\"separator\": \",\", \"3,4;3.55\"}", 400);
         deleteTriangle(getFirstExistingTriangle());
     }
 
