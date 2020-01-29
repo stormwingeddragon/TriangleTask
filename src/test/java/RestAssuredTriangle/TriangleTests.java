@@ -40,6 +40,20 @@ public class TriangleTests {
         deleteTriangle(getFirstExistingTriangle());
     }
 
+    @Test
+    public void oneSideZero() throws Exception {
+        createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"3;4;0\"}", 422);
+        deleteTriangle(getFirstExistingTriangle());
+    }
+
+    //Bug: Possible to create all sides as 0
+    @Ignore
+    @Test
+    public void allSidesZero() throws Exception {
+        createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"0;0;0\"}", 422);
+        deleteTriangle(getFirstExistingTriangle());
+    }
+
     //Ignores fourth side
     @Ignore
     @Test
@@ -57,6 +71,18 @@ public class TriangleTests {
     @Test
     public void wrongSeparator() throws Exception {
         createTriangleAndCheckResponse("{\"separator\": \",\", \"input\": \"3;4;5\"}", 422);
+        deleteTriangle(getFirstExistingTriangle());
+    }
+
+    @Test
+    public void differentSeparator() throws Exception {
+        createTriangleAndCheckResponse("{\"separator\": \",\", \"input\": \"3,4,6.55\"}", 200);
+        deleteTriangle(getFirstExistingTriangle());
+    }
+
+    @Test
+    public void oneOfSeparatorsDiffers() throws Exception {
+        createTriangleAndCheckResponse("{\"separator\": \",\", \"input\": \"3,4;3.55\"}", 422);
         deleteTriangle(getFirstExistingTriangle());
     }
 
@@ -81,6 +107,16 @@ public class TriangleTests {
     @Test
     public void straightLineTriangleDoesNotCauseException() throws Exception {
         createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"3;4;7\"}", 200);
+        deleteTriangle(getFirstExistingTriangle());
+    }
+
+    @Ignore
+    @Test
+    public void maxValueSidesBoundaryCondition() throws Exception {
+        float side = Float.MAX_VALUE;
+        createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"" +side+ ";" +side+ ";" +side+ "\"}", 200);
+        calculateArea(getFirstExistingTriangle());
+        calculatePerimeter(getFirstExistingTriangle());
         deleteTriangle(getFirstExistingTriangle());
     }
 
