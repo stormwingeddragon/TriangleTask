@@ -8,7 +8,6 @@ import io.restassured.specification.RequestSpecification;
 import java.util.ArrayList;
 
 import static io.restassured.RestAssured.given;
-import static jdk.nashorn.internal.runtime.Debug.id;
 
 public class Utilities {
 
@@ -22,6 +21,16 @@ public class Utilities {
         return area;
     }
 
+    public static float calculatePerimeter(String id) {
+        RequestSpecification httpRequest = RestAssured.given().header("Content-Type", "application/json").
+                header("X-User", "583e29b5-0ade-4e86-bb2e-5ab7529c8a22");
+        Response response = httpRequest.get("https://qa-quiz.natera.com/triangle/" + id + "/perimeter");
+        JsonPath jsonPathEvaluator = response.jsonPath();
+        float perimeter = jsonPathEvaluator.get("result");
+        System.out.println("perimeter of newly created Triangle is " + perimeter);
+        return perimeter;
+    }
+
     public static String createTriangle(String input) {
         RestAssured.baseURI = "http://restapi.demoqa.com/utilities/weather/city";
         RequestSpecification httpRequest = RestAssured.given().header("Content-Type", "application/json").
@@ -31,8 +40,20 @@ public class Utilities {
         JsonPath jsonPathEvaluator = response.jsonPath();
         String  id = jsonPathEvaluator.get("id");
         System.out.println("id of newly created Triangle is " + id);
-        //return id(0);
         return id;
+    }
+
+    public static void createTriangleAndCheckResponse(String input, int response) {
+                given().
+                        header("Content-Type", "application/json").
+                        header("X-User", "583e29b5-0ade-4e86-bb2e-5ab7529c8a22").
+                        body(input).
+                when().
+                        post("https://qa-quiz.natera.com/triangle").
+                then().
+                        statusCode(response).
+                        log().
+                        all();
     }
 
     public static void deleteTriangle(String id) {
@@ -47,14 +68,15 @@ public class Utilities {
                 all();
     }
 
-    public static String getFirstExistingTriangle() {
+    public static String getFirstExistingTriangle () {
         RequestSpecification httpRequest = RestAssured.given().
                 header("Content-Type", "application/json").
                 header("X-User", "583e29b5-0ade-4e86-bb2e-5ab7529c8a22");
         Response response = httpRequest.get("https://qa-quiz.natera.com/triangle/all");
         JsonPath jsonPathEvaluator = response.jsonPath();
         ArrayList id = jsonPathEvaluator.get("id");
-        return id(0);
+        if (id.isEmpty()) return null;
+        return id.get(0).toString();
     }
 
     public static String createTriangle() {
@@ -69,8 +91,17 @@ public class Utilities {
         return id;
     }
 
-
+    public static boolean deleteExistingTriangle() {
+        String id = getFirstExistingTriangle();
+        if (id == null) return false;
+        System.out.println("triangle id" + id);
+        deleteTriangle(id);
+        return true;
     }
+
+
+
+}
 
 
 
