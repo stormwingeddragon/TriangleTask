@@ -2,22 +2,12 @@ package RestAssuredTriangle;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
-import javax.swing.text.Utilities;
-
 import static RestAssuredTriangle.Utilities.*;
-import static RestAssuredTriangle.Utilities.getFirstExistingTriangle;
 
 public class TriangleTests {
-    private Utilities u;
-
-    @BeforeClass
-    public void setUp() {
-        u = new Utilities();
-    }
 
     @Test
     public void checkTriangleArea() throws Exception {
@@ -108,7 +98,7 @@ public class TriangleTests {
     @Test
     public void negativeSidesLengthsDoNotCauseException() throws Exception {
         createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"-3;-4;-5\"}", 200);
-        //deleteTriangle(getFirstExistingTriangle());
+        deleteTriangle(getFirstExistingTriangle());
     }
 
     @Test
@@ -139,7 +129,6 @@ public class TriangleTests {
     @Ignore
     public void checkImpossibleToCreateEleventhTriangle() throws Exception {
         String[] ids = new String[10];
-        //String[] ids = {"0"};
         for  (int i=0; i < 10; i++) {
           ids[i]  = createTriangle("{\"separator\": \";\", \"input\": \"3;4;5\"}");
         }
