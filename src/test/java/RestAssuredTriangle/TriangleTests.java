@@ -1,6 +1,7 @@
 package RestAssuredTriangle;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
@@ -117,13 +118,19 @@ public class TriangleTests {
     }
 
     //Bug: area of a triangle with 2x Float.MAX_VALUE sides and third side as 1 is equal to 0
-    //@Ignore
+    @Ignore
     @Test
-    public void maxValueSidesBoundaryCondition() throws Exception {
+    public void maxValueTwoSidesAreaCalculation() throws Exception {
         float side = Float.MAX_VALUE;
         createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"" +side+ ";" +side+ ";1\"}", 200);
         calculateArea(getFirstExistingTriangle());
-        //calculatePerimeter(getFirstExistingTriangle());
+        deleteTriangle(getFirstExistingTriangle());
+    }
+
+    @Test
+    public void maxValueSidesBoundaryCondition() throws Exception {
+        float side = Float.MAX_VALUE;
+        createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"" +side+ ";" +side+ ";"+side+"\"}", 200);
         deleteTriangle(getFirstExistingTriangle());
     }
 
@@ -144,7 +151,7 @@ public class TriangleTests {
         }
     }
 
-    @Test
+    @AfterClass
     public void cleanupTriangles() {
         String id = getFirstExistingTriangle();
         while (id != null) {
