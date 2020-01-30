@@ -95,12 +95,14 @@ public class TriangleTests {
         deleteTriangle(getFirstExistingTriangle());
     }
 
+    //Possible bug: negative side values accepted
     @Test
     public void negativeSidesLengthsDoNotCauseException() throws Exception {
         createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"-3;-4;-5\"}", 200);
         deleteTriangle(getFirstExistingTriangle());
     }
 
+    //Possible bug: straight line triangle
     @Test
     public void straightLineTriangleDoesNotCauseException() throws Exception {
         createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"3;4;7\"}", 200);
@@ -124,7 +126,7 @@ public class TriangleTests {
         deleteTriangle(getFirstExistingTriangle());
     }
 
-    //Bug found, possible to create 11 triangles instead of 10
+    //Bug: Possible to create 11 triangles instead of 10
     @Test
     @Ignore
     public void checkImpossibleToCreateEleventhTriangle() throws Exception {
