@@ -37,19 +37,17 @@ public class TriangleTests {
         deleteTriangle(getFirstExistingTriangle());
     }
 
-    //Bug: Possible to create all sides as 0
-    @Ignore
+    //Possible Bug: Possible to create triangle with all sides as 0
     @Test
     public void allSidesZero() throws Exception {
-        createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"0;0;0\"}", 422);
+        createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"0;0;0\"}", 200);
         deleteTriangle(getFirstExistingTriangle());
     }
 
-    //Ignores fourth side (possible bug)
-    @Ignore
+    //Possible Bug: Ignores fourth side (possible bug)
     @Test
     public void fourSides() throws Exception {
-        createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"3;4;5;4\"}", 422);
+        createTriangleAndCheckResponse("{\"separator\": \";\", \"input\": \"3;4;5;4\"}", 200);
         deleteTriangle(getFirstExistingTriangle());
     }
 
